@@ -408,7 +408,7 @@ psql --file=Models/seeds.sql TacoTuesdayDatabase
 > NOTE: Your Migrations files will have different filenames with distinct
 > timestamps
 
-<GithubCommitViewer repo="gstark/TacoTuesday" commit="8be03a729660b65ce285c62fb2365a7c174e73f9">
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="8be03a729660b65ce285c62fb2365a7c174e73f9" />
 
 ---
 
