@@ -579,10 +579,6 @@ function RestaurantList() {
 
 This should render an _empty_ list of restaurants at first.
 
-## Files Updated
-
-- [ClientApp/src/pages/Restaurants](https://raw.githubusercontent.com/gstark/TacoTuesday/5b0f50e1af09c3bb332eaf8390e6b6d18a12fe28/ClientApp/src/pages/Restaurants.jsx)
-
 ## Fetching data
 
 Now we will use the `fetch` method to load the list of restaurants from our API.
@@ -595,11 +591,14 @@ function RestaurantList() {
   const [restaurants, setRestaurants] = useState([])
 
   useEffect(() => {
-    fetch('/api/Restaurants')
-      .then(response => response.json())
-      .then(apiData => {
-        setRestaurants(apiData)
-      })
+    async function loadRestaurants() {
+      const response = await fetch('/api/restaurants')
+      const json = await response.json()
+
+      setRestaurants(json)
+    }
+
+    loadRestaurants()
   }, [])
 
   return (...
@@ -616,7 +615,7 @@ restaurants on our home page.
 
 ## Files Updated
 
-- [ClientApp/src/pages/Restaurants.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/518ef34e375b6989b667da16ad68da681ed2ec17/ClientApp/src/pages/Restaurants.jsx)
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="961549d">
 
 ## Refactor
 
