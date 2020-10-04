@@ -201,7 +201,7 @@ You may be promted by a page that says: `You do not have a valid JWT_KEY.`
 To resolve this you can run `dotnet user-secrets init` followed by the
 `dotnet user-secrets set` command given on that page.
 
-<GithubCommitViewer repo="gstark/TacoTuesday" commit="ee2aa454155faa85957f1edd842ad34bd4d1dfd4" />
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="62ad5422797541b00f236632a141b86082dc8a84" />
 
 # Create Static HTML and CSS
 
@@ -290,7 +290,7 @@ phones and tablets.
 
 ## Files Updated
 
-<GithubCommitViewer repo="gstark/TacoTuesday" commit="1e5185a80a77d9c7296213e6c57fe596a5acba8d"/>
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="dccf4e9e0336f9d5050006ca8f84230d1ae1f6c2"/>
 
 # Create migrations
 
@@ -408,7 +408,7 @@ psql --file=Models/seeds.sql TacoTuesdayDatabase
 > NOTE: Your Migrations files will have different filenames with distinct
 > timestamps
 
-<GithubCommitViewer repo="gstark/TacoTuesday" commit="8be03a729660b65ce285c62fb2365a7c174e73f9" />
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="c9fd5d40eae2b243c6573097684bf9425cb7c462" />
 
 ---
 
@@ -519,7 +519,7 @@ anything to do with our backend API resources.
 
 ## Files Updated
 
-- [Controllers/RestaurantsController](https://raw.githubusercontent.com/gstark/TacoTuesday/3bafd4231a8114a456577cd745c0510b58c3d261/Controllers/RestaurantsController.cs)
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="42ab3ba" />
 
 ## Get a list of restaurants
 
