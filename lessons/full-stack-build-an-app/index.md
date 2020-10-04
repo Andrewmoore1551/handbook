@@ -194,6 +194,13 @@ You can run both the _backend_ and the _front end_ from a **single** command of
 dotnet watch run
 ```
 
+## Setting the JWT Key
+
+You may be promted by a page that says: `You do not have a valid JWT_KEY.`
+
+To resolve this you can run `dotnet user-secrets init` followed by the
+`dotnet user-secrets set` command given on that page.
+
 <GithubCommitViewer repo="gstark/TacoTuesday" commit="ee2aa454155faa85957f1edd842ad34bd4d1dfd4" />
 
 # Create Static HTML and CSS
@@ -243,13 +250,24 @@ export function App() {
 3. Removing the contents of the `components` directory.
 4. Removing the contents of the 'pages' directory.
 
-<!-- https://github.com/gstark/TacoTuesday/commit/5435a46398b41677f488911fc9a5bdf6a7fbcee2 -->
+## Remove bootstrap if you are not going to use it
 
-## Start by building the component right in the main `<App>`
+Remove the line `import 'bootstrap/dist/css/bootstrap.css'` from `index.js` if
+you don't intend on using bootstrap. You may also choose to remove the
+dependency with these commands:
 
-A good place to start is a page that mostly lists data. These pages are
-typically early in the user interaction with a page and often include quite a
-bit of the data the system has. Starting with this page will help ensure you are
+```shell
+cd ClientApp
+npm uninstall bootstrap
+```
+
+Not including the CSS is enough to remove the Bootstrap styles.
+
+## Start by building the component directly into the main `<App>`
+
+A good place to start is a page that primarily lists data. These pages are
+typically early in the user interaction with a page and often include much of
+the data the system has. Starting with this page will help ensure you are
 properly dealing with much of the data in your system.
 
 ## Extract components as you go
@@ -270,29 +288,9 @@ also helps ensure that you have a good mobile design since it is likely that
 many of the visitors to your site will be on narrow viewport devices such as
 phones and tablets.
 
-## Use react-router to make each page
-
-By using simple `<Route>` with React Router, we can give the illusion of
-navigation. It also allows us to start to understand what components need to be
-associated with which components and how we might handle getting the data we
-need. (eg. getting the restaurant ID for a `<RestaurantDetails>` component)
-
 ## Files Updated
 
-<!-- https://github.com/gstark/TacoTuesday/commit/ac137ad972bcbb7732807096bf845dba3db1a391 -->
-
-- [ClientApp/src/App.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/ac137ad972bcbb7732807096bf845dba3db1a391/ClientApp/src/App.jsx)
-- [ClientApp/src/custom.scss](https://raw.githubusercontent.com/gstark/TacoTuesday/ac137ad972bcbb7732807096bf845dba3db1a391/ClientApp/src/custom.scss)
-- [ClientApp/src/pages/Restaurants.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/ac137ad972bcbb7732807096bf845dba3db1a391/ClientApp/src/pages/Restaurants.jsx)
-- [ClientApp/src/pages/AddRestaurant.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/ac137ad972bcbb7732807096bf845dba3db1a391/ClientApp/src/pages/AddRestaurant.jsx)
-- [ClientApp/src/pages/ShowRestaurant.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/ac137ad972bcbb7732807096bf845dba3db1a391/ClientApp/src/pages/ShowRestaurant.jsx)
-- [ClientApp/src/components/Header.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/ac137ad972bcbb7732807096bf845dba3db1a391/ClientApp/src/components/Header.jsx)
-- [ClientApp/src/components/](https://raw.githubusercontent.com/gstark/TacoTuesday/ac137ad972bcbb7732807096bf845dba3db1a391/ClientApp/src/components/NavBar.jsx)
-
-And at this point, we can navigate around the application but only with static
-information.
-
----
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="1e5185a80a77d9c7296213e6c57fe596a5acba8d"/>
 
 # Create migrations
 
@@ -410,12 +408,7 @@ psql --file=Models/seeds.sql TacoTuesdayDatabase
 > NOTE: Your Migrations files will have different filenames with distinct
 > timestamps
 
-- [Models/Restaurant.cs](https://raw.githubusercontent.com/gstark/TacoTuesday/4822b4cca25bae2d078202e5ca726190d6395123/Models/Restaurant.cs)
-- [Models/DatabaseContext.cs](https://raw.githubusercontent.com/gstark/TacoTuesday/4822b4cca25bae2d078202e5ca726190d6395123/Models/DatabaseContext.cs)
-- [Migrations/20200705195609_CreateRestaurant.Designer.cs](https://raw.githubusercontent.com/gstark/TacoTuesday/4822b4cca25bae2d078202e5ca726190d6395123/Migrations/20200705195609_CreateRestaurant.Designer.cs)
-- [Migrations/20200705195609_CreateRestaurant.cs](https://raw.githubusercontent.com/gstark/TacoTuesday/4822b4cca25bae2d078202e5ca726190d6395123/Migrations/20200705195609_CreateRestaurant.cs)
-- [Migrations/DatabaseContextModelSnapshot.cs](https://raw.githubusercontent.com/gstark/TacoTuesday/4822b4cca25bae2d078202e5ca726190d6395123/Migrations/DatabaseContextModelSnapshot.cs)
-- [Models/seeds.sql](https://raw.githubusercontent.com/gstark/TacoTuesday/4822b4cca25bae2d078202e5ca726190d6395123/Models/seeds.sql)
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="8be03a729660b65ce285c62fb2365a7c174e73f9">
 
 ---
 
@@ -1787,6 +1780,7 @@ namespace TacoTuesday.Models
         public int Id { get; set; }
         public string Summary { get; set; }
         public string Body { get; set; }
+        public int Stars { get; set; }
         public DateTime CreatedAt { get; private set; } = DateTime.Now;
         public int RestaurantId { get; set; }
     }
