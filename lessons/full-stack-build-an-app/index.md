@@ -652,7 +652,7 @@ function RestaurantList() {
 
 ## Files Updated
 
-- [ClientApp/src/pages/Restaurants.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/6500b761dc09d9064af4529621f6fb937f9f7dd8/ClientApp/src/pages/Restaurants.jsx)
+<GithubCommitViewer repo="gstark/TacoTuesday" commits="25b5f865ecf480a92be8e9ce5978fe6cb57950e6"/>
 
 # Adding a search feature to our API
 
@@ -704,188 +704,40 @@ Then we will update the `<input>` tag
 
 ```jsx
 <input
-  className="form-control mr-sm-2"
-  type="search"
-  placeholder="Search"
-  aria-label="Search"
+  type="text"
+  placeholder="Search..."
   value={filterText}
-  onChange={event => setFilterText(event.target.value)}
+  onChange={event =>
+    function () {
+      setFilterText(event.target.value)
+    }
+  }
 />
 ```
 
-And add a click handler for the `Search` button itself
-
-```html
-<span
-  className="btn btn-outline-success my-2 my-sm-0"
-  onClick="{handleClickSearch}"
->
-  Search
-</span>
-```
-
-And finally the `handleClickSearch` method
+## Update the useEffect to take the filterText into consideration
 
 ```javascript
-const handleClickSearch = () => {
-  console.log(`The user wants to search for ${filterText}`)
-}
+useEffect(() => {
+  async function loadRestaurants() {
+    const url =
+      filterText.length === 0
+        ? `/api/Restaurants`
+        : `/api/Restaurants?filter=${filterText}`
+
+    const response = await fetch(url)
+    const json = await response.json()
+
+    setRestaurants(json)
+  }
+
+  loadRestaurants()
+}, [filterText])
 ```
 
 ## Files Updated
 
-- [Controllers/RestaurantsController.cs](https://raw.githubusercontent.com/gstark/TacoTuesday/f7ad38c6da8f2d71efcee2d88e33fa648363c563/Controllers/RestaurantsController.cs)
-- [ClientApp/src/components/NavBar.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/f7ad38c6da8f2d71efcee2d88e33fa648363c563/ClientApp/src/components/NavBar.jsx)
-
----
-
-## Houston, we have a problem
-
-Somehow this `filterText` has to make it from the `NavBar` over to the
-`Restaurants` component. Remembering that **state always flows down** we
-recognize that the active filter needs to be at the level (or above) where both
-the `<NavBar/>` and the `<Restaurants/>` components are. This is so that the
-state can be passed down. Also, we will pass down the method that **updates**
-the state where needed.
-
-Thus we will define a new state in the `<App/>` component for the `activeFilter`
-
-```javascript
-const [activeFilter, setActiveFilter] = useState('')
-```
-
-And we will pass it down where needed:
-
-`<NavBar activeFilter={activeFilter} setActiveFilter={setActiveFilter} />`
-
-and
-
-`<Restaurants activeFilter={activeFilter} />`
-
-Then in the `NavBar`, we can use the `setActiveFilter` method to change the
-active filter in the `handleClickSearch` method.
-
-First, update the function to accept props
-
-```javascript
-export function NavBar(props) {
-```
-
-And then set the active filter when ready
-
-```javascript
-const handleClickSearch = () => {
-  console.log(`The user wants to search for ${filterText}`)
-  props.setActiveFilter(filterText)
-}
-```
-
-Now let's visit the `Restaurants` component and use the newly passed prop,
-`activeFilter`
-
-First, update the function to accept `props`
-
-```javascript
-export function Restaurants(props) {
-```
-
-Then update the `useEffect` to dynamically build the `url` to use based on the
-presence of any text in the `activeFilter` props.
-
-```javascript
-console.log('RestaurantList rendering')
-
-useEffect(() => {
-  const url =
-    props.activeFilter.length === 0
-      ? `/api/Restaurants`
-      : `/api/Restaurants/filter=${props.activeFilter}`
-
-  console.log(`Fetching from ${url}`)
-
-  fetch(url)
-    .then(response => response.json())
-    .then(apiData => {
-      setRestaurants(apiData)
-    })
-}, [])
-```
-
-If you enter some text and search you **WILL** see the message
-`RestaurantList rendering` you will **NOT** see a console log for
-`Fetching from ...` nor will you see the list of restaurants update.
-
-This is because even though the `Restaurants` component will be re-rendered when
-the `activeFilter` state in the `<App>` changes, we haven't told the code inside
-the `useEffect` to run when the contents of `props.activeFilter` change.
-
-We need to **add** that variable to our now empty array of dependencies `[]` so
-that the code becomes:
-
-```javascript
-console.log('RestaurantList rendering')
-
-useEffect(() => {
-  const url =
-    props.activeFilter.length === 0
-      ? `/api/Restaurants`
-      : `/api/Restaurants?filter=${props.activeFilter}`
-
-  console.log(`Fetching from ${url}`)
-
-  fetch(url)
-    .then(response => response.json())
-    .then(apiData => {
-      setRestaurants(apiData)
-    })
-}, [props.activeFilter])
-```
-
-Now our search works.
-
-## Review this in-depth
-
-- Our `NavBar` has its own local state variable, `filterText`
-
-- When the input changes, we use `setFilterText` to update the `filterText`
-  state with the value of the input (from `event.target.value`)
-
-- This causes the `NavBar` to render and show the up-to-date `value` of the
-  `<input>` element.
-
-- When the user clicks on the `Search` button we call `handleClickSearch`
-
-- The `handleClickSearch` method uses the supplied `props.setActiveFilter`
-  method to set that to the current `filterText`
-
-- `setActiveFilter` is sent to the `NavBar` from its parent (thus why it is a
-  `props.` variable) where it maintains a state named `activeFilter`
-
-- Since this was just **updated** the `App` will re-render
-
-- The `App` also sends the state `activeFilter` to the `Restaurants` component
-
-- Since the `Restaurant` component is monitoring `props.activeFilter` in a
-  `useState`, the code inside that `useState` will execute again.
-
-- That code looks at the value of `props.activeFilter`. If it has nothing
-  (length === 0) then it uses the original URL. However, if it _does_ have any
-  text, it uses a URL where the `?filter=` query param is filled in.
-
-- The results of that `fetch` are then used to re-populate the list of
-  restaurants.
-
-- Since the controller, when given a `filter` query parameter, only returns
-  restaurants with that text in the name, we will see an updated list of
-  restaurants on the page.
-
-> WHEW!
-
-## Files Updated
-
-- [ClientApp/src/App.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/4f61820cb80731c1124d5bcaceb0dd1115b608da/ClientApp/src/App.jsx)
-- [ClientApp/src/components/NavBar.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/4f61820cb80731c1124d5bcaceb0dd1115b608da/ClientApp/src/components/NavBar.jsx)
-- [ClientApp/src/pages/Restaurants.jsx](https://raw.githubusercontent.com/gstark/TacoTuesday/4f61820cb80731c1124d5bcaceb0dd1115b608da/ClientApp/src/pages/Restaurants.jsx)
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="2fa9e2d32598dd0e47b60b1941a7acd4dee53901"/>
 
 ---
 
