@@ -25,8 +25,6 @@ Make Summary and Body required on Review and add the error handling
 
 -->
 
-<GithubCommitViewer repo="gstark/TacoTuesday" commit="4822b4cca25bae2d078202e5ca726190d6395123" />
-
 In this lesson, we will be combining all of our skills from
 `Introduction to Programming with C#` and
 `Fundamentals of Front-end Web Development`. To do so we will build an
@@ -195,6 +193,8 @@ You can run both the _backend_ and the _front end_ from a **single** command of
 ```shell
 dotnet watch run
 ```
+
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="ee2aa454155faa85957f1edd842ad34bd4d1dfd4" />
 
 # Create Static HTML and CSS
 
