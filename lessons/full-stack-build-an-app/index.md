@@ -25,6 +25,8 @@ Make Summary and Body required on Review and add the error handling
 
 -->
 
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="4822b4cca25bae2d078202e5ca726190d6395123" />
+
 In this lesson, we will be combining all of our skills from
 `Introduction to Programming with C#` and
 `Fundamentals of Front-end Web Development`. To do so we will build an
@@ -54,19 +56,17 @@ As such our user stories might be something like the following:
   - Description
   - Address and phone number
   - A list of reviews
-  - The number of upvotes
-  - The number of downvotes.
+  - The average rating
 - As a user, I should be able to anonymously post a new taco restaurant.
 - As a user, I should be able to review an existing restaurant.
-- As a user, I should be able to upvote or downvote a restaurant.
-- As a user, I should be able to upvote or downvote a review.
+- As a user, I should be able to rate a restaurant.
 
 # Generate a wireframe
 
-Based on the various user stories we should be able to generate a rough
-wireframe of the user interface that would support these features. We would try
-to imagine a user experience that would make a usable application that
-implements the minimum viable product.
+Based on the user stories we should be able to generate a rough wireframe of the
+user interface that would support these features. We would try to imagine a user
+experience that would make a usable application that implements the "Minimum
+Viable Product".
 
 For an application we expect to charge users for, this would be the least amount
 of features and thus effort for which they would pay us. For an application that
@@ -79,7 +79,7 @@ are presently using.
 > Via
 > https://brianpagan.net/2015/lean-startup-mvp-how-to-make-meaningful-products/
 
-Here we see the various elements that an application requires.
+Here we see the elements an application requires.
 
 - Functionality: The actual functions of the system must exist and do what they
   claim they do
@@ -96,10 +96,10 @@ These are lofty goals and we cannot focus the entire time on any one level of
 this pyramid. We must iterate through vertical slices as we visit each function
 of our application. That is when working on each part of the system we want to
 include all four of these aspects in some amount. As we proceed through the
-various features we will make discoveries that will allow us to revisit each of
-these aspects on all of the features. We may also discover, through iteration,
-that certain features and functions may not be required, saving us a tremendous
-amount of time.
+features we will make discoveries that will allow us to revisit each of these
+aspects on all the features. We may also discover, through iteration, that
+certain features and functions may elimiated, saving us a tremendous amount of
+time.
 
 > No code is easier to develop and executes more efficiently than code you never
 > have to write.
@@ -123,8 +123,7 @@ Name
 Description
 Address
 Telephone
-Upvote Count
-Downvote Count
+Average Stars?
 Review Count?
 ```
 
@@ -135,6 +134,7 @@ Review
 ------
 Summary
 Body
+Stars
 Creation Timestamp
 Restaurant
 ```
@@ -1183,9 +1183,7 @@ bootstrap element to the user.
 ```html
 <div className="card-body">
   {errorMessage && (
-  <div className="alert alert-danger" role="alert">
-    {errorMessage}
-  </div>
+  <div className="alert alert-danger" role="alert">{errorMessage}</div>
   )}
 </div>
 ```
