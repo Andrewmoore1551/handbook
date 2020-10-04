@@ -1,5 +1,5 @@
 ---
-title: Adding Search
+title: The Rest
 order: 99
 ---
 
