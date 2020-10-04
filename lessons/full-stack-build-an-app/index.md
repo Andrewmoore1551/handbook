@@ -615,7 +615,7 @@ restaurants on our home page.
 
 ## Files Updated
 
-<GithubCommitViewer repo="gstark/TacoTuesday" commit="961549d">
+<GithubCommitViewer repo="gstark/TacoTuesday" commit="961549d" />
 
 ## Refactor
 
